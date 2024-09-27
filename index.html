@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boot OSI App</title>
+</head>
+<body>
+    <h1>Boot OSI App</h1>
+    <textarea id="fileContent" rows="10" cols="30"></textarea><br>
+    <button id="updateBtn">Update File</button>
+    <button id="loadBtn">Load File</button>
+
+    <script>
+        const loadBtn = document.getElementById('loadBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const fileContent = document.getElementById('fileContent');
+
+        loadBtn.addEventListener('click', () => {
+            fetch('/read')
+                .then(response => response.text())
+                .then(data => {
+                    fileContent.value = data;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        updateBtn.addEventListener('click', () => {
+            const content = fileContent.value;
+            fetch('/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
